@@ -1,12 +1,19 @@
 
 public class TerrainTest {
-	public static void main(String[] args) {
-		Terrain a = new Terrain(5,5);
-		System.out.println(a.toString());
-		a.addEntries(new double[]{4.5,5.5,4,3.5,4,4.5,5,4.5,4,4,5,5,5.5,4.5,5,4,4.5,5,5,4,4,4,4.5,4,3.5});
-		a.setTree(2);
-		a.addTree(new Integer[] {1,1,3});
-		a.addTree(new Integer[] {2,3,4});
-		System.out.println(a.toString());
+	public static void main(String[] args) throws InterruptedException {
+		Terrain a = new Terrain();
+		System.out.println("Reading in data");
+		a.readInData("sample_input.txt");System.out.println("Reading in data Complete");
+		//System.out.println(a.toString());
+		/*for (Tree t:a.trees) {
+			System.out.println(t.sunlight());
+		}*/
+		ParallelTerrain[] b = new ParallelTerrain[100];
+		
+		for (int i=0; i<100;i++) {
+			b[i] = new ParallelTerrain(i*(a.trees.size()/100),a.trees.size()/100,a.trees);
+			b[i].start();
+		}
+		//System.out.println("Average sunlight per tree is: " + Terrain.totalSunlight/a.trees.size());
 	}
 }

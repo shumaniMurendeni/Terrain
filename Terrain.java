@@ -1,62 +1,83 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Terrain {
-	private int width;
-	private int height;
-	private double[][] terrain;
-	private int tree;
-	private ArrayList<Integer[]> trees;
-	public Terrain(int width, int height) {
-		this.width = width;
-		this.height = height;
-		this.terrain = new double[this.height][this.width];
-		this.tree = 0;
-		this.trees = new ArrayList<>();
-	}
 	
-	public void addEntries(double[] arr) {
+	protected static int width;
+	protected static int height;
+	protected static double[][] terrain;
+	protected static double totalSunlight;
+	protected ArrayList<Tree> trees;
+	
+	public Terrain(int width, int height) {
+		setDimensions(width,height);
+		totalSunlight = 0;
+		trees = new ArrayList<>();
+	}
+	public Terrain(String filename) {
+		trees = new ArrayList<>();
+		totalSunlight = 0;
+		readInData(filename);
+	}
+	public Terrain() {
+		trees = new ArrayList<>();
+		totalSunlight = 0;
+	}
+
+	public void addEntries(Scanner in) {
 		for (int i=0; i<height;i++) {
 			for (int j=0;j<width;j++) {
-				terrain[i][j] = arr[i*width + j];
+				terrain[i][j] = in.nextDouble();
 			}
 		}
 	}
-
-	public int getTree() {
-		return tree;
-	}
-
-	public void setTree(int tree) {
-		this.tree = tree;
-	}
 	
-	public void addTree(Integer[] coord) {
-		trees.add(coord);
+	public void addTree(Tree tre) {
+		trees.add(tre);	
 	}
 		
 	public String toString() {
+		System.out.println("toString Method");
 		StringBuilder strb = new StringBuilder();
 		float sum = 0;
-		strb.append(tree + "\n");
-		for (Integer[] tre:trees) {
-			double sunlight = getSunlight(tre[0],tre[1],tre[2]);
+		strb.append(trees.size() + "\n");
+		for (Tree tre:trees) {
+			double sunlight = tre.sunlight();
 			sum+= sunlight;
 			strb.append(String.format("%s\n", sunlight));
 		}
 		
 		return String.format("%.1f\n"+strb.toString(), sum/trees.size());
 	}
-
-	private float getSunlight(Integer xStart, Integer yStart, Integer size) {
-			float sum = 0;
-			for (int i=yStart;i < yStart + size; i++ ) { 
-				for (int j=xStart; j < xStart + size; j++ ) {
-					if (j<width && i<height){sum+= terrain[i][j];}
-					else {break;}
-				}
-				if (i>=height) {break;}
-			}
+	
+	public void readInData(String filename) {
+		try {
+			int count = 0;
+			File file = new File(filename);
+			Scanner reader = new Scanner(file);
 			
-		return sum;
+			setDimensions(reader.nextInt(),reader.nextInt());	//reads in the size of the terrain and sets it up.
+			addEntries(reader);									//read and add terrain sunlight values.
+			reader.nextInt(); 									//reads in the number of trees.
+			
+			while (reader.hasNext() && count<1000000) {
+				addTree(new Tree(reader.nextInt(),
+						reader.nextInt(),reader.nextInt()));	//reads in each tree spec and add the tree to the List
+				
+				count++;
+			}
+			reader.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void setDimensions(int parseInt, int parseInt2) {
+		width = parseInt;
+		height = parseInt2;
+		terrain = new double[height][width];
 	}
 }
