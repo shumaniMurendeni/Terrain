@@ -5,10 +5,10 @@ import java.util.Scanner;
 
 public class Terrain {
 	
-	protected static int width;
-	protected static int height;
-	protected static double[][] terrain;
-	protected static double totalSunlight;
+	protected int width;
+	protected int height;
+	protected static float[][] terrain;
+	protected double totalSunlight;
 	protected ArrayList<Tree> trees;
 	
 	public Terrain(int width, int height) {
@@ -29,27 +29,9 @@ public class Terrain {
 	public void addEntries(Scanner in) {
 		for (int i=0; i<height;i++) {
 			for (int j=0;j<width;j++) {
-				terrain[i][j] = in.nextDouble();
+				terrain[i][j] = in.nextFloat();
 			}
 		}
-	}
-	
-	public void addTree(Tree tre) {
-		trees.add(tre);	
-	}
-		
-	public String toString() {
-		System.out.println("toString Method");
-		StringBuilder strb = new StringBuilder();
-		float sum = 0;
-		strb.append(trees.size() + "\n");
-		for (Tree tre:trees) {
-			double sunlight = tre.sunlight();
-			sum+= sunlight;
-			strb.append(String.format("%s\n", sunlight));
-		}
-		
-		return String.format("%.1f\n"+strb.toString(), sum/trees.size());
 	}
 	
 	public void readInData(String filename) {
@@ -63,7 +45,7 @@ public class Terrain {
 			reader.nextInt(); 									//reads in the number of trees.
 			
 			while (reader.hasNext() && count<1000000) {
-				addTree(new Tree(reader.nextInt(),
+				trees.add(new Tree(reader.nextInt(),
 						reader.nextInt(),reader.nextInt()));	//reads in each tree spec and add the tree to the List
 				
 				count++;
@@ -78,6 +60,6 @@ public class Terrain {
 	private void setDimensions(int parseInt, int parseInt2) {
 		width = parseInt;
 		height = parseInt2;
-		terrain = new double[height][width];
+		terrain = new float[height][width];
 	}
 }
