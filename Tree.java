@@ -9,6 +9,7 @@ public class Tree {
 		this.xStart = xStart;
 		this.yStart = yStart;
 		this.size = size;
+		sunlight = 0;
 		checkAll();
 	}
 

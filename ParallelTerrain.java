@@ -1,14 +1,14 @@
 import java.util.ArrayList;
-import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
 
 public class ParallelTerrain extends RecursiveTask<Float>{
 	
+	private static final long serialVersionUID = 1L;
 	private int start;
 	private int end;
-	final static int THRESHHOLD = 400000000;
+	final static int THRESHHOLD = 350;
 	ArrayList<Tree> trees;
-	StringBuilder str;
+	String str;
 	float sunlight;
 	
 	public ParallelTerrain(int start, int end, ArrayList<Tree> trees) {
@@ -16,7 +16,7 @@ public class ParallelTerrain extends RecursiveTask<Float>{
 		this.start = start;
 		this.end = end;
 		this.trees = trees;
-		str = new StringBuilder();
+		str = "";
 		sunlight = 0;
 	}
 	
@@ -24,12 +24,10 @@ public class ParallelTerrain extends RecursiveTask<Float>{
 	protected Float compute() {
 		if (end - start <1) {return (float) 0;}
 		else if (end - start <= THRESHHOLD) {
-			//System.out.println("Compute method "+start + " " + end);
 			for (int i=start;i<end;i++) {
 				float t = trees.get(i).sunlight();
 				sunlight += t;
-				//System.out.println(t);
-				str.append(t  +"\n");
+				//str = str + t  +"\n";
 			}
 			return sunlight;
 		}
@@ -44,9 +42,13 @@ public class ParallelTerrain extends RecursiveTask<Float>{
 		left.fork();
 		right.compute();
 		left.quietlyJoin();
-		str.append(left.str);str.append(right.str);
+		//str = str + left.str;
 		sunlight = left.sunlight + right.sunlight;
 	}
 	
+	@Override
+	public String toString() {
+		return str;
+	}
 
 }
