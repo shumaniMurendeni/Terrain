@@ -6,9 +6,10 @@ public class ParallelTerrain extends RecursiveTask<Float>{
 	private static final long serialVersionUID = 1L;
 	private int start;
 	private int end;
-	final static int THRESHHOLD = 350;
+	static int THRESHHOLD = 350;
+	static boolean strr = false;
 	ArrayList<Tree> trees;
-	String str;
+	final StringBuilder str = new StringBuilder();
 	float sunlight;
 	
 	public ParallelTerrain(int start, int end, ArrayList<Tree> trees) {
@@ -16,8 +17,10 @@ public class ParallelTerrain extends RecursiveTask<Float>{
 		this.start = start;
 		this.end = end;
 		this.trees = trees;
-		str = "";
 		sunlight = 0;
+	}
+	public static void threshhold(int size) {
+		THRESHHOLD = (int) Math.max(250, size*0.22);
 	}
 	
 	@Override
@@ -27,7 +30,10 @@ public class ParallelTerrain extends RecursiveTask<Float>{
 			for (int i=start;i<end;i++) {
 				float t = trees.get(i).sunlight();
 				sunlight += t;
-				//str = str + t  +"\n";
+			}
+			if(strr) {
+				for (int i=start;i<end;i++) 
+					str.append(trees.get(i).sunlight + "\n");
 			}
 			return sunlight;
 		}
@@ -42,13 +48,16 @@ public class ParallelTerrain extends RecursiveTask<Float>{
 		left.fork();
 		right.compute();
 		left.quietlyJoin();
-		//str = str + left.str;
+		if (strr) {
+			str.append(left.str);
+			str.append(right.str);
+		}
 		sunlight = left.sunlight + right.sunlight;
 	}
 	
 	@Override
 	public String toString() {
-		return str;
+		return str.toString();
 	}
 
 }

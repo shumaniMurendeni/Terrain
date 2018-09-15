@@ -4,12 +4,14 @@ public class Tree {
 	protected int yStart;
 	protected int size;
 	protected float sunlight;
-	public Tree(int xStart, int yStart, int size) {
+	float[][] arr;
+	public Tree(int xStart, int yStart, int size,float[][] arr) {
 		super();
 		this.xStart = xStart;
 		this.yStart = yStart;
 		this.size = size;
 		sunlight = 0;
+		this.arr = arr;
 		checkAll();
 	}
 
@@ -24,7 +26,6 @@ public class Tree {
 	
 	public float sunlight() {
 		sunlight = 0;
-		float[][] arr = Terrain.terrain;
 		int height = arr[0].length; 
 		int width = arr[0].length;
 		

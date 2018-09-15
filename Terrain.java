@@ -46,7 +46,7 @@ public class Terrain {
 			
 			while (reader.hasNext() && count<1000000) {
 				trees.add(new Tree(reader.nextInt(),
-						reader.nextInt(),reader.nextInt()));	//reads in each tree spec and add the tree to the List
+						reader.nextInt(),reader.nextInt(),terrain));	//reads in each tree spec and add the tree to the List
 				
 				count++;
 			}
