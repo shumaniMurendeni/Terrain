@@ -19,6 +19,10 @@ public class ParallelTerrain extends RecursiveTask<Float>{
 		this.trees = trees;
 		sunlight = 0;
 	}
+	public ParallelTerrain(int start, int end, ArrayList<Tree> trees,int size) {
+	  this(start,end,trees);
+	  threshhold(size);
+	}
 	public static void threshhold(int size) {
 		THRESHHOLD = (int) Math.max(250, size*0.22);
 	}

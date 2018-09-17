@@ -4,7 +4,7 @@ import java.io.UnsupportedEncodingException;
 
 public class TerrainTest {
 	public static void main(String[] args) throws InterruptedException {
-		Terrain a = new Terrain();System.out.println("...");
+		Terrain a = new Terrain();
 		if(args.length==2) {
 			a.readInData(args[0]);
 			writeToFile(a,args[1]);
@@ -30,6 +30,9 @@ public class TerrainTest {
 					case "Thread test":
 						threadTest(a);
 						break;
+					case "cutoff_value":
+					  cutOffValueTest(a);
+					  break;
 					default:
 						System.out.println(toString(a));
 						break;
